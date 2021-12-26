@@ -1,0 +1,54 @@
+Brute force :-
+ vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> ans;
+        for(int i=0;i<nums1.size();i++){
+            int ele=nums1[i];
+            for(int j=0;j<nums2.size();j++){
+                if(nums2[j]==ele){
+                    bool insert=false;
+                    for(int k=j+1;k<nums2.size();k++){
+                        if(nums2[k]>ele){
+                            ans.push_back(nums2[k]);
+                            insert=true;
+                            break;
+                        }
+                    }
+                    if(!insert){
+                        ans.push_back(-1);
+                        break;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+
+Optimal Sol :-
+ vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+vector<int> ans;
+ //     unordered_map<element ,nextgreater >
+unordered_map<int, int> m;
+stack<int> s;
+m[nums2.size() - 1] = -1;
+// FIRSTLY WE FIND NEXT GREATER ELEMENT OF NUMS2 ELEMENT AND 
+// STORE IT IN MAP
+    for (int i = nums2.size() - 1; i >= 0; i--)  {
+        while (!s.empty() && s.top() < nums2[i])  {
+            s.pop();
+        }
+        if (s.empty())  {
+            m[nums2[i]] = -1;
+        }
+        else  {
+            m[nums2[i]] = s.top();
+        }
+        s.push(nums2[i]);
+    }
+ //        FIND NEXT GREATER ELEMENT OF NUMS1 IN MAP
+    for (int i = 0; i < nums1.size(); i++)   {
+        if (m.find(nums1[i]) != m.end()) {
+            ans.push_back(m[nums1[i]]);
+        }
+    }
+    return ans;
+}
